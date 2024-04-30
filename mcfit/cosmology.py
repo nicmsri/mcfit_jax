@@ -1,6 +1,6 @@
 """Cosmology applications"""
 
-from mymcfit.mcfit import mcfit
+from mcfit.mcfit import mcfit
 from mymcfit import kernels
 from numpy import pi
 

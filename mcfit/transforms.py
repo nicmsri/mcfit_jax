@@ -1,7 +1,7 @@
 """Common Integral transforms and applications"""
 
-from mymcfit.mcfit import mcfit
-from mymcfit import kernels
+from mcfit.mcfit import mcfit
+from mcfit import kernels
 from numpy import pi
 from scipy.special import gamma
 
