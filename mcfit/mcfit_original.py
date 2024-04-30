@@ -171,11 +171,12 @@ class mcfit(object):
     def _setup(self):
         if self.Nin < 2:
             raise ValueError(f"input size {self.Nin} must not be smaller than 2")
-        Delta = self.np.log(self.x[-1] / self.x[0]) / (self.Nin - 1)
+        Delta = math.log(self.x[-1] / self.x[0]) / (self.Nin - 1)
         x_head = self.x[:8]
-        # if not self.np.allclose(self.np.log(x_head[1:] / x_head[:-1]), Delta,
-        #                        rtol=1e-3):
-        #    warnings.warn("input must be log-spaced")
+        if not self.np.allclose(
+            self.np.log(x_head[1:] / x_head[:-1]), Delta, rtol=1e-3
+        ):
+            warnings.warn("input must be log-spaced")
 
         if isinstance(self.N, complex):
             folds = math.ceil(math.log2(self.Nin * self.N.imag))
@@ -187,22 +188,18 @@ class mcfit(object):
             )
 
         if self.lowring and self.N % 2 == 0:
-            lnxy = (
-                Delta
-                / self.np.pi
-                * self.np.angle(self.MK(self.q + 1j * self.np.pi / Delta))
-            )
-            self.xy = self.np.exp(lnxy)
+            lnxy = Delta / math.pi * cmath.phase(self.MK(self.q + 1j * math.pi / Delta))
+            self.xy = math.exp(lnxy)
         else:
-            lnxy = self.np.log(self.xy)
-        self.y = self.np.exp(lnxy - Delta) / self.x[::-1]
+            lnxy = math.log(self.xy)
+        self.y = math.exp(lnxy - Delta) / self.x[::-1]
 
         self._x_ = self._pad(self.x, 0, True, False)
         self._y_ = self._pad(self.y, 0, True, True)
 
-        m = self.np.arange(0, self.N // 2 + 1)
-        self._u = self.MK(self.q + 2j * self.np.pi / self.N / Delta * m)
-        self._u *= self.np.exp(-2j * self.np.pi * lnxy / self.N / Delta * m)
+        m = numpy.arange(0, self.N // 2 + 1)
+        self._u = self.MK(self.q + 2j * math.pi / self.N / Delta * m)
+        self._u *= numpy.exp(-2j * math.pi * lnxy / self.N / Delta * m)
         self._u = self.np.asarray(self._u, dtype=(self.x[0] + 0j).dtype)
 
         # following is unnecessary because hfft ignores the imag at Nyquist anyway

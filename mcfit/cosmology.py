@@ -1,11 +1,11 @@
 """Cosmology applications"""
 
-from mcfit.mcfit import mcfit
-from mcfit import kernels
+from mymcfit.mcfit import mcfit
+from mymcfit import kernels
 from numpy import pi
 
 
-__all__ = ['P2xi', 'xi2P', 'C2w', 'w2C', 'TophatVar', 'GaussVar']
+__all__ = ["P2xi", "xi2P", "C2w", "w2C", "TophatVar", "GaussVar"]
 
 
 class P2xi(mcfit):
@@ -24,6 +24,7 @@ class P2xi(mcfit):
 
     See :class:`mcfit.mcfit`
     """
+
     def __init__(self, k, l=0, n=None, deriv=0, q=1.5, **kwargs):
         self.l = l
         MK = kernels.Mellin_SphericalBesselJ(l, deriv)
@@ -34,8 +35,8 @@ class P2xi(mcfit):
         else:
             phase = 1
 
-        mcfit.__init__(self, k, MK, q+n, **kwargs)
-        self.prefac *= self.x**(3+n) / (2*pi)**1.5
+        mcfit.__init__(self, k, MK, q + n, **kwargs)
+        self.prefac *= self.x ** (3 + n) / (2 * pi) ** 1.5
         self.postfac *= phase
 
 
@@ -51,13 +52,14 @@ class xi2P(mcfit):
 
     See :class:`mcfit.mcfit`
     """
+
     def __init__(self, r, l=0, deriv=0, q=1.5, **kwargs):
         self.l = l
         MK = kernels.Mellin_SphericalBesselJ(l, deriv)
         mcfit.__init__(self, r, MK, q, **kwargs)
         self.prefac *= self.x**3
         phase = (-1 if l & 2 else 1) * (1j if l & 1 else 1)  # i^l
-        self.postfac *= (2*pi)**1.5 / phase
+        self.postfac *= (2 * pi) ** 1.5 / phase
 
 
 class C2w(mcfit):
@@ -71,11 +73,12 @@ class C2w(mcfit):
 
     See :class:`mcfit.mcfit`
     """
+
     def __init__(self, ell, nu=0, deriv=0, q=1, **kwargs):
         self.nu = nu
         MK = kernels.Mellin_BesselJ(nu, deriv)
         mcfit.__init__(self, ell, MK, q, **kwargs)
-        self.prefac *= self.x**2 / (2*pi)
+        self.prefac *= self.x**2 / (2 * pi)
 
 
 class w2C(mcfit):
@@ -89,12 +92,13 @@ class w2C(mcfit):
 
     See :class:`mcfit.mcfit`
     """
+
     def __init__(self, theta, nu=0, deriv=0, q=1, **kwargs):
         self.nu = nu
         MK = kernels.Mellin_BesselJ(nu, deriv)
         mcfit.__init__(self, theta, MK, q, **kwargs)
         self.prefac *= self.x**2
-        self.postfac *= 2*pi
+        self.postfac *= 2 * pi
 
 
 class TophatVar(mcfit):
@@ -114,6 +118,7 @@ class TophatVar(mcfit):
 
     See :class:`mcfit.mcfit`
     """
+
     def __init__(self, k, deriv=0, q=1.5, **kwargs):
         MK = kernels.Mellin_TophatSq(3, deriv)
         mcfit.__init__(self, k, MK, q, **kwargs)
@@ -129,6 +134,7 @@ class GaussVar(mcfit):
 
     See :class:`mcfit.mcfit`
     """
+
     def __init__(self, k, deriv=0, q=1.5, **kwargs):
         MK = kernels.Mellin_GaussSq(deriv)
         mcfit.__init__(self, k, MK, q, **kwargs)

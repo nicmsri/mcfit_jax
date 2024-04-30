@@ -1,7 +1,7 @@
 """Multiplicatively Convolutional Fast Integral Transform"""
 
-from mcfit.mcfit import mcfit
-from mcfit.transforms import *
-from mcfit.cosmology import *
+from mymcfit.mcfit import mcfit
+from mymcfit.transforms import *
+from mymcfit.cosmology import *
 
 __version__ = "0.0.21"

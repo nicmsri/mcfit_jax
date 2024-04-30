@@ -1,13 +1,21 @@
 """Common Integral transforms and applications"""
 
-from mcfit.mcfit import mcfit
-from mcfit import kernels
+from mymcfit.mcfit import mcfit
+from mymcfit import kernels
 from numpy import pi
 from scipy.special import gamma
 
 
-__all__ = ['Hankel', 'SphericalBessel', 'DoubleBessel', 'DoubleSphericalBessel',
-           'FourierSine', 'FourierCosine', 'TophatSmooth', 'GaussSmooth']
+__all__ = [
+    "Hankel",
+    "SphericalBessel",
+    "DoubleBessel",
+    "DoubleSphericalBessel",
+    "FourierSine",
+    "FourierCosine",
+    "TophatSmooth",
+    "GaussSmooth",
+]
 
 
 class Hankel(mcfit):
@@ -20,6 +28,7 @@ class Hankel(mcfit):
 
     See :class:`mcfit.mcfit`
     """
+
     def __init__(self, x, nu=0, deriv=0, q=1, **kwargs):
         self.nu = nu
         MK = kernels.Mellin_BesselJ(nu, deriv)
@@ -37,6 +46,7 @@ class SphericalBessel(mcfit):
 
     See :class:`mcfit.mcfit`
     """
+
     def __init__(self, x, nu=0, deriv=0, q=1.5, **kwargs):
         self.nu = nu
         MK = kernels.Mellin_SphericalBesselJ(nu, deriv)
@@ -49,6 +59,7 @@ class FourierSine(mcfit):
 
     See :class:`mcfit.mcfit`
     """
+
     def __init__(self, x, deriv=0, q=0.5, **kwargs):
         MK = kernels.Mellin_FourierSine(deriv)
         mcfit.__init__(self, x, MK, q, **kwargs)
@@ -60,6 +71,7 @@ class FourierCosine(mcfit):
 
     See :class:`mcfit.mcfit`
     """
+
     def __init__(self, x, deriv=0, q=0.5, **kwargs):
         MK = kernels.Mellin_FourierCosine(deriv)
         mcfit.__init__(self, x, MK, q, **kwargs)
@@ -85,6 +97,7 @@ class DoubleBessel(mcfit):
 
     See :class:`mcfit.mcfit`
     """
+
     def __init__(self, x, alpha, nu=0, nu1=None, nu2=None, q=None, **kwargs):
         self.alpha = alpha
         if nu1 is None:
@@ -121,6 +134,7 @@ class DoubleSphericalBessel(mcfit):
 
     See :class:`mcfit.mcfit`
     """
+
     def __init__(self, x, alpha, nu=0, nu1=None, nu2=None, q=None, **kwargs):
         self.alpha = alpha
         if nu1 is None:
@@ -148,11 +162,12 @@ class TophatSmooth(mcfit):
 
     See :class:`mcfit.mcfit`
     """
+
     def __init__(self, x, dim=3, deriv=0, q=0, **kwargs):
         self.dim = dim
         MK = kernels.Mellin_Tophat(dim, deriv)
         mcfit.__init__(self, x, MK, q, **kwargs)
-        self.prefac *= self.x**dim / (2**(dim-1) * pi**(dim/2) * gamma(dim/2))
+        self.prefac *= self.x**dim / (2 ** (dim - 1) * pi ** (dim / 2) * gamma(dim / 2))
 
 
 class GaussSmooth(mcfit):
@@ -165,8 +180,9 @@ class GaussSmooth(mcfit):
 
     See :class:`mcfit.mcfit`
     """
+
     def __init__(self, x, dim=3, deriv=0, q=0, **kwargs):
         self.dim = dim
         MK = kernels.Mellin_Gauss(deriv)
         mcfit.__init__(self, x, MK, q, **kwargs)
-        self.prefac *= self.x**dim / (2**(dim-1) * pi**(dim/2) * gamma(dim/2))
+        self.prefac *= self.x**dim / (2 ** (dim - 1) * pi ** (dim / 2) * gamma(dim / 2))
